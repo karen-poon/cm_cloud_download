@@ -8,7 +8,7 @@ func main() {
 	var downloadedImageURLs = MakeSliceFromFile("files/cloud_gallery_urls.txt.done")
 	var allImageURLs = MakeSliceFromFile("files/cloud_gallery_urls.txt")
 
-	fmt.Print("\nTotal number of images: ")
+	fmt.Print("Total number of images: ")
 	fmt.Println(len(allImageURLs))
 
 	fmt.Print("\nNumber of Images Downloaded: ")
