@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
+	"sort"
 )
 
 func main() {
@@ -17,6 +17,7 @@ func main() {
 	}
 	downloadedImagesScanner := bufio.NewScanner(downloadedImages)
 	for downloadedImagesScanner.Scan() {
+		//insert scanned text into the downloadedImageURLs slice
 		downloadedImageURLs = append(downloadedImageURLs, downloadedImagesScanner.Text())
 	}
 
@@ -28,6 +29,7 @@ func main() {
 	}
 	allImagesScanner := bufio.NewScanner(allImages)
 	for allImagesScanner.Scan() {
+		//insert scanned text into the allImageURLs
 		allImageURLs = append(allImageURLs, allImagesScanner.Text())
 	}
 
@@ -38,41 +40,49 @@ func main() {
 	fmt.Println(len(downloadedImageURLs))
 
 	fmt.Println("\nDownloaded images are listed as follows:")
-	match(0, 0, downloadedImageURLs, allImageURLs)
+	var downloadedListofNumbers = findDownloaded(downloadedImageURLs, allImageURLs)
+	printDownloadedList(downloadedListofNumbers)
 }
 
-func match(breakMatch, matchAgain int, downloadedImageURLs, allImageURLs []string) {
-	if matchAgain == len(allImageURLs)-1 {
-		if downloadedImageURLs[len(downloadedImageURLs)-1] == allImageURLs[len(allImageURLs)-1] && matchAgain != len(allImageURLs)-1 {
-			fmt.Printf("From %d to %d\n", len(allImageURLs)-1, len(allImageURLs)-1)
-		}
-		return
-	}
-	var notMatchingAnymore int
-	for i := 0; i < len(downloadedImageURLs)-breakMatch; i++ {
-		if strings.Compare(downloadedImageURLs[breakMatch+i], allImageURLs[matchAgain+i]) != 0 {
-			breakMatch = breakMatch + i
-			notMatchingAnymore = matchAgain + i
-			//fmt.Println(breakMatch, notMatchingAnymore)
-			break
+// returns a sorted list of downloaded images in numbers
+func findDownloaded(downloadedImageURLs, allImageURLs []string) []int {
+	var downloadedListofNumbers = make([]int, 0)
+	for _, downloadedURL := range downloadedImageURLs {
+		for j, allURL := range allImageURLs {
+			if downloadedURL == allURL {
+				downloadedListofNumbers = append(downloadedListofNumbers, j)
+			}
 		}
 	}
-	if notMatchingAnymore == 0 { // if it did not go into the for loop above
-		notMatchingAnymore = matchAgain + len(downloadedImageURLs) - breakMatch
-	}
-	fmt.Printf("From %d to %d\n", matchAgain, notMatchingAnymore-1)
-	for j := 0; j < len(allImageURLs)-notMatchingAnymore; j++ {
-		if strings.Compare(downloadedImageURLs[breakMatch], allImageURLs[notMatchingAnymore+j]) == 0 {
-			matchAgain = notMatchingAnymore + j
-			//fmt.Println(matchAgain)
-			break
-		} else {
-			matchAgain = len(allImageURLs) - 1 //rest of the list has no matching
-			//fmt.Println(matchAgain)
+	sort.Ints(downloadedListofNumbers)
+	fmt.Println(downloadedListofNumbers)
+	return downloadedListofNumbers
+}
+
+// prints the downloaded list of numbers in format of "someNumber - someNumber"
+func printDownloadedList(downloadedListofNumbers []int) {
+	var start, end int
+	var scanningRange = len(downloadedListofNumbers) - 1
+
+	for i := 0; i < scanningRange; i++ {
+		//check whether the next is a consecutive number
+		if downloadedListofNumbers[i]+1 != downloadedListofNumbers[i+1] {
+			end = downloadedListofNumbers[i]
+			fmt.Printf("%d - %d\n", start, end)
+			start = downloadedListofNumbers[i+1]
+		}
+
+		//the following is to handle last set of consecutive numbers to be displayed
+		//two conditions to be considered:
+		//1. the last set of consecutive numbers ends with the last number
+		//	(did not go into the previous if statement which makes it not able to print)
+		//2. only the last number is left to be displayed
+		if i == scanningRange-1 &&
+			(end != downloadedListofNumbers[i] ||
+				start == downloadedListofNumbers[i+1]) {
+			end = downloadedListofNumbers[i+1]
+			fmt.Printf("%d - %d\n", start, end)
 		}
 	}
-	if len(allImageURLs) == notMatchingAnymore { // if it did not go into the for loop above
-		matchAgain = len(allImageURLs) - 1
-	}
-	match(breakMatch, matchAgain, downloadedImageURLs, allImageURLs)
+	return
 }
