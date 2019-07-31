@@ -50,7 +50,7 @@ func PrintDownloadedList(downloadedListofNumbers []int) {
 		//check whether the next is a consecutive number
 		if downloadedListofNumbers[i]+1 != downloadedListofNumbers[i+1] {
 			end = downloadedListofNumbers[i]
-			fmt.Printf("%d - %d\n", start, end)
+			fmt.Printf("%d - %d\n", start+1, end+1)
 			start = downloadedListofNumbers[i+1]
 		}
 
@@ -63,7 +63,7 @@ func PrintDownloadedList(downloadedListofNumbers []int) {
 			(end != downloadedListofNumbers[i] ||
 				start == downloadedListofNumbers[i+1]) {
 			end = downloadedListofNumbers[i+1]
-			fmt.Printf("%d - %d\n", start, end)
+			fmt.Printf("%d - %d\n", start+1, end+1)
 		}
 	}
 	return
