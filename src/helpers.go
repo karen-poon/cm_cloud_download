@@ -16,7 +16,6 @@ func FindDownloaded(downloadedImageURLs, allImageURLs []string) []int {
 		}
 	}
 	sort.Ints(downloadedListofNumbers)
-	fmt.Println(downloadedListofNumbers)
 	return downloadedListofNumbers
 }
 
