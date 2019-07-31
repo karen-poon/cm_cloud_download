@@ -31,36 +31,48 @@ func main() {
 		allImageURLs = append(allImageURLs, allImagesScanner.Text())
 	}
 
-	fmt.Print("Total number of Images: ")
+	fmt.Print("\nTotal number of images: ")
 	fmt.Println(len(allImageURLs))
 
-	fmt.Print("Number of Images Downloaded: ")
+	fmt.Print("\nNumber of Images Downloaded: ")
 	fmt.Println(len(downloadedImageURLs))
 
+	fmt.Println("\nDownloaded images are listed as follows:")
 	match(0, 0, downloadedImageURLs, allImageURLs)
 }
 
-func match(breakPoint, nextStart int, downloadedImageURLs, allImageURLs []string) {
-	if len(downloadedImageURLs) == breakPoint+1 || nextStart == len(allImageURLs) {
+func match(breakMatch, matchAgain int, downloadedImageURLs, allImageURLs []string) {
+	if matchAgain == len(allImageURLs)-1 {
+		if downloadedImageURLs[len(downloadedImageURLs)-1] == allImageURLs[len(allImageURLs)-1] && matchAgain != len(allImageURLs)-1 {
+			fmt.Printf("From %d to %d\n", len(allImageURLs)-1, len(allImageURLs)-1)
+		}
 		return
 	}
-	var stop int
-	for i := 0; i < len(downloadedImageURLs)-breakPoint; i++ {
-		if strings.Compare(downloadedImageURLs[breakPoint+i], allImageURLs[nextStart+i]) != 0 {
-			breakPoint = breakPoint + i
-			stop = nextStart + i
-			fmt.Println(breakPoint, stop)
+	var notMatchingAnymore int
+	for i := 0; i < len(downloadedImageURLs)-breakMatch; i++ {
+		if strings.Compare(downloadedImageURLs[breakMatch+i], allImageURLs[matchAgain+i]) != 0 {
+			breakMatch = breakMatch + i
+			notMatchingAnymore = matchAgain + i
+			//fmt.Println(breakMatch, notMatchingAnymore)
 			break
 		}
 	}
-	for j := 0; j < len(allImageURLs)-stop; j++ {
-		if strings.Compare(downloadedImageURLs[breakPoint], allImageURLs[stop+j]) == 0 {
-			nextStart = stop + j
-			fmt.Println(nextStart)
+	if notMatchingAnymore == 0 { // if it did not go into the for loop above
+		notMatchingAnymore = matchAgain + len(downloadedImageURLs) - breakMatch
+	}
+	fmt.Printf("From %d to %d\n", matchAgain, notMatchingAnymore-1)
+	for j := 0; j < len(allImageURLs)-notMatchingAnymore; j++ {
+		if strings.Compare(downloadedImageURLs[breakMatch], allImageURLs[notMatchingAnymore+j]) == 0 {
+			matchAgain = notMatchingAnymore + j
+			//fmt.Println(matchAgain)
 			break
 		} else {
-			nextStart = len(allImageURLs) //rest of the list has no matching
+			matchAgain = len(allImageURLs) - 1 //rest of the list has no matching
+			//fmt.Println(matchAgain)
 		}
 	}
-	match(breakPoint, nextStart, downloadedImageURLs, allImageURLs)
+	if len(allImageURLs) == notMatchingAnymore { // if it did not go into the for loop above
+		matchAgain = len(allImageURLs) - 1
+	}
+	match(breakMatch, matchAgain, downloadedImageURLs, allImageURLs)
 }
