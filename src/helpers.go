@@ -1,9 +1,31 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"log"
+	"os"
 	"sort"
 )
+
+// MakeSliceFromFile makes a slice by inserting the text of the given file line by line
+func MakeSliceFromFile(fileName string) []string {
+	var sliceOfURLs = make([]string, 0)
+
+	// open the file
+	file, err := os.Open(fileName)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//insert scanned text into the sliceOfURLs
+	downloadedImagesScanner := bufio.NewScanner(file)
+	for downloadedImagesScanner.Scan() {
+		sliceOfURLs = append(sliceOfURLs, downloadedImagesScanner.Text())
+	}
+
+	return sliceOfURLs
+}
 
 // FindDownloaded returns a sorted list of downloaded images in numbers
 func FindDownloaded(downloadedImageURLs, allImageURLs []string) []int {
