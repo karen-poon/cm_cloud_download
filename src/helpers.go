@@ -38,7 +38,6 @@ func FindDownloaded(downloadedImageURLs, allImageURLs []string) []int {
 		}
 	}
 	sort.Ints(downloadedListofNumbers)
-	downloadedListofNumbers = deleteDuplicates(downloadedListofNumbers)
 	return downloadedListofNumbers
 }
 
@@ -49,7 +48,7 @@ func PrintDownloadedList(downloadedListofNumbers []int) {
 
 	for i := 0; i < scanningRange; i++ {
 		//check whether the next is a consecutive number
-		if downloadedListofNumbers[i]+1 != downloadedListofNumbers[i+1] {
+		if downloadedListofNumbers[i]+1 < downloadedListofNumbers[i+1] {
 			end = downloadedListofNumbers[i]
 			if start == end {
 				fmt.Printf("%d\n", end+1)
@@ -76,19 +75,4 @@ func PrintDownloadedList(downloadedListofNumbers []int) {
 		}
 	}
 	return
-}
-
-/************************************************************************************/
-func deleteDuplicates(downloadedListofNumbers []int) []int {
-	seen := make(map[int]struct{}, len(downloadedListofNumbers))
-	i := 0
-	for _, number := range downloadedListofNumbers {
-		if _, ok := seen[number]; ok {
-			continue
-		}
-		seen[number] = struct{}{}
-		downloadedListofNumbers[i] = number
-		i++
-	}
-	return downloadedListofNumbers[:i]
 }
