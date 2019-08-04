@@ -24,7 +24,7 @@ func main() {
 	fmt.Println("\nPress q + Enter to terminate")
 	var input string
 	for input != "q" {
-		//waits for user to press enter to terminate program
+		//waits for user's input to terminate program
 		fmt.Scanf("%s", &input)
 	}
 }
