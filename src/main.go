@@ -5,10 +5,13 @@ import (
 )
 
 func main() {
+	fmt.Println("Welcome to Check CM Cloud Downloaded Images!")
+	fmt.Println("By @karen-poon")
+
 	var downloadedImageURLs = MakeSliceFromFile("files/cloud_gallery_urls.txt.done")
 	var allImageURLs = MakeSliceFromFile("files/cloud_gallery_urls.txt")
 
-	fmt.Print("Total number of images: ")
+	fmt.Print("\nTotal number of images: ")
 	fmt.Println(len(allImageURLs))
 
 	fmt.Print("\nNumber of Images Downloaded: ")
@@ -17,4 +20,11 @@ func main() {
 	fmt.Println("\nDownloaded images are listed as follows:")
 	var downloadedListofNumbers = FindDownloaded(downloadedImageURLs, allImageURLs)
 	PrintDownloadedList(downloadedListofNumbers)
+
+	fmt.Println("\nPress q + Enter to terminate")
+	var input string
+	for input != "q" {
+		//waits for user to press enter to terminate program
+		fmt.Scanf("%s", &input)
+	}
 }
