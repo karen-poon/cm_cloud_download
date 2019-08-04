@@ -24,6 +24,9 @@ For example: `00000033.jpg`. This program prints a list of downloaded images in 
 The following shows an example of running main.exe:
 
 ```
+Welcome to Check CM Cloud Downloaded Images!
+By @karen-poon
+
 Total number of images: 44
 
 Number of Images Downloaded: 30
@@ -34,4 +37,6 @@ Downloaded images are listed as follows:
 16 - 34
 38 - 40
 44
+
+Press q + Enter to terminate
 ```
